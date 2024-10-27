@@ -44,6 +44,7 @@ jobs:
     - name: change name before upload
       if: steps.get_ci_id.outputs.ci_id != 0
       run: |
+        ls
         mv ./deb-aarch64-linux-musl             ./aarch64-unknown-linux-musl.deb
         mv ./deb-aarch64-linux-musl-debug       ./aarch64-unknown-linux-musl-debug.deb
         mv ./deb-x86_64-linux-musl              ./x86_64-unknown-linux-musl.deb
