@@ -68,39 +68,39 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         TAG: ${{ steps.get_ci_id.outputs.tag }}
       run: |
-        gh release upload $TAG "./aarch64-unknown-linux-musl.deb" \
+        gh release upload $TAG "./aarch64-linux-musl.deb" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./aarch64-unknown-linux-musl-debug.deb" \
+        gh release upload $TAG "./aarch64-linux-musl-debug.deb" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./x86_64-unknown-linux-musl.deb" \
+        gh release upload $TAG "./x86_64-linux-musl.deb" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./x86_64-unknown-linux-musl-debug.deb" \
+        gh release upload $TAG "./x86_64-linux-musl-debug.deb" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./oci-image-aarch64-unknown-linux-musl.tar.gz" \
+        gh release upload $TAG "./oci-image-aarch64-linux-musl.tar.gz" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./oci-image-aarch64-unknown-linux-musl-debug.tar.gz" \
+        gh release upload $TAG "./oci-image-aarch64-linux-musl-debug.tar.gz" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./oci-image-x86_64-unknown-linux-musl.tar.gz" \
+        gh release upload $TAG "./oci-image-x86_64-linux-musl.tar.gz" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./oci-image-x86_64-unknown-linux-musl-debug.tar.gz" \
+        gh release upload $TAG "./oci-image-x86_64-linux-musl-debug.tar.gz" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./static-aarch64-unknown-linux-musl" \
+        gh release upload $TAG "./static-aarch64-linux-musl" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./static-aarch64-unknown-linux-musl-debug" \
+        gh release upload $TAG "./static-aarch64-linux-musl-debug" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./static-x86_64-unknown-linux-musl" \
+        gh release upload $TAG "./static-x86_64-linux-musl" \
           --clobber \
           --repo="${{github.repository}}"
-        gh release upload $TAG "./static-x86_64-unknown-linux-musl-debug" \
+        gh release upload $TAG "./static-x86_64-linux-musl-debug" \
           --clobber \
           --repo="${{github.repository}}"
