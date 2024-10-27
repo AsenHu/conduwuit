@@ -1,0 +1,62 @@
+name: Upload Release Assets
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: get latest ci id
+      id: get_ci_id
+      run: |
+        id=$(gh api repos/AsenHu/conduwuit/actions/workflows/ci.yml/runs -q '.workflow_runs[0].id')
+        echo "ci_id=$id" >> "$GITHUB_OUTPUT"
+    - name: get latest ci artifacts
+      uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+        run-id: ${{ steps.get_ci_id.outputs.ci_id }}
+    - name: upload release assets
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} "./deb-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
