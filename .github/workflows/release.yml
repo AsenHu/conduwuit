@@ -41,22 +41,8 @@ jobs:
         run-id: ${{ steps.get_ci_id.outputs.ci_id }}
         github-token: ${{ github.token }}
 
-    - name: change name before upload
-      if: steps.get_ci_id.outputs.ci_id != 0
-      run: |
+    - run: |
         ls
-        mv ./deb-aarch64-linux-musl             ./aarch64-unknown-linux-musl.deb
-        mv ./deb-aarch64-linux-musl-debug       ./aarch64-unknown-linux-musl-debug.deb
-        mv ./deb-x86_64-linux-musl              ./x86_64-unknown-linux-musl.deb
-        mv ./deb-x86_64-linux-musl-debug        ./x86_64-unknown-linux-musl-debug.deb
-        mv ./oci-image-aarch64-linux-musl       ./oci-image-aarch64-unknown-linux-musl.tar.gz
-        mv ./oci-image-aarch64-linux-musl-debug ./oci-image-aarch64-unknown-linux-musl-debug.tar.gz
-        mv ./oci-image-x86_64-linux-musl        ./oci-image-x86_64-unknown-linux-musl.tar.gz
-        mv ./oci-image-x86_64-linux-musl-debug  ./oci-image-x86_64-unknown-linux-musl-debug.tar.gz
-        mv ./static-aarch64-linux-musl          ./static-aarch64-unknown-linux-musl
-        mv ./static-aarch64-linux-musl-debug    ./static-aarch64-unknown-linux-musl-debug
-        mv ./static-x86_64-linux-musl           ./static-x86_64-unknown-linux-musl
-        mv ./static-x86_64-linux-musl-debug     ./static-x86_64-unknown-linux-musl-debug
 
     - name: upload release assets
       if: steps.get_ci_id.outputs.ci_id != 0
