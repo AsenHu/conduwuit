@@ -1,0 +1,71 @@
+name: Upload Release Assets
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: get latest ci id
+      id: get_ci_id
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        id=$(gh api repos/${{ github.repository }}/actions/workflows/ci.yml/runs -q '.workflow_runs[0].id')
+        echo "ci_id=$id" >> "$GITHUB_OUTPUT"
+
+    - name: get latest ci artifacts
+      uses: actions/download-artifact@v4
+      env:
+        GH_TOKEN: ${{ github.token }}
+      with:
+        merge-multiple: true
+        run-id: ${{ steps.get_ci_id.outputs.ci_id }}
+        github-token: ${{ github.token }}
+
+    - name: upload release assets
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} "./deb-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./deb-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./oci-image-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-aarch64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-aarch64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-x86_64-linux-musl" \
+          --clobber \
+          --repo="${{github.repository}}"
+        gh release upload ${{ github.event.release.tag_name }} "./static-x86_64-linux-musl-debug" \
+          --clobber \
+          --repo="${{github.repository}}"
