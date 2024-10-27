@@ -20,11 +20,19 @@ jobs:
         # get all runs of the ci workflow
         json=$(gh api repos/${{ github.repository }}/actions/workflows/ci.yml/runs)
 
-        # find first run that is not a pull request and status is completed
-        id=$(echo $json | jq '.workflow_runs[] | select(.event != "pull_request" and .status == "completed") | .id' | head -n 1)
+        # find first run that is github sha and status is completed
+        id=$(echo $json | jq '.workflow_runs[] | select(.head_sha == ${{ github.sha }} and .status == "completed") | .id' | head -n 1)
+        if [ ! "$id" ]
+        then
+          echo "No completed runs found"
+          echo "ci_id=0" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
         echo "ci_id=$id" >> "$GITHUB_OUTPUT"
 
     - name: get latest ci artifacts
+      if: steps.get_ci_id.outputs.ci_id != 0
       uses: actions/download-artifact@v4
       env:
         GH_TOKEN: ${{ github.token }}
@@ -34,6 +42,7 @@ jobs:
         github-token: ${{ github.token }}
 
     - name: change name before upload
+      if: steps.get_ci_id.outputs.ci_id != 0
       run: |
         mv ./deb-aarch64-linux-musl             ./aarch64-unknown-linux-musl.deb
         mv ./deb-aarch64-linux-musl-debug       ./aarch64-unknown-linux-musl-debug.deb
@@ -49,6 +58,7 @@ jobs:
         mv ./static-x86_64-linux-musl-debug     ./static-x86_64-unknown-linux-musl-debug
 
     - name: upload release assets
+      if: steps.get_ci_id.outputs.ci_id != 0
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
