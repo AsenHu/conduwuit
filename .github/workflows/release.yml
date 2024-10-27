@@ -17,7 +17,11 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        id=$(gh api repos/${{ github.repository }}/actions/workflows/ci.yml/runs -q '.workflow_runs[0].id')
+        # get all runs of the ci workflow
+        json=$(gh api repos/${{ github.repository }}/actions/workflows/ci.yml/runs)
+
+        # find first run that is not a pull request and status is completed
+        id=$(echo $json | jq '.workflow_runs[] | select(.event != "pull_request" and .status == "completed") | .id' | head -n 1)
         echo "ci_id=$id" >> "$GITHUB_OUTPUT"
 
     - name: get latest ci artifacts
