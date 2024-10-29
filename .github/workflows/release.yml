@@ -27,16 +27,17 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]
+        set -xv
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]
         then
           id="${{ github.event.inputs.action_id }}"
           tag="${{ github.event.inputs.tag }}"
         else
           # get all runs of the ci workflow
-          json=$(gh api repos/${{ github.repository }}/actions/workflows/ci.yml/runs)
+          json=$(gh api "repos/${{ github.repository }}/actions/workflows/ci.yml/runs")
 
           # find first run that is github sha and status is completed
-          id=$(echo $json | jq '.workflow_runs[] | select(.head_sha == ${{ github.sha }} and .status == "completed") | .id' | head -n 1)
+          id=$(echo "$json" | jq '.workflow_runs[] | select(.head_sha == ${{ github.sha }} and .status == "completed") | .id' | head -n 1)
           if [ ! "$id" ]; then
             echo "No completed runs found"
             echo "ci_id=0" >> "$GITHUB_OUTPUT"
